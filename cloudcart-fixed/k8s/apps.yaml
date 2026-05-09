@@ -1,0 +1,251 @@
+# ─────────────────────────────────────────────
+# catalog  (Spring Boot — port 8080)
+# ─────────────────────────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog
+  namespace: cloudcart
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: catalog
+  template:
+    metadata:
+      labels:
+        app: catalog
+    spec:
+      containers:
+      - name: catalog
+        image: 264765155226.dkr.ecr.ap-south-1.amazonaws.com/catalog:latest
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: catalog
+  namespace: cloudcart
+spec:
+  selector:
+    app: catalog
+  ports:
+  - port: 8080
+    targetPort: 8080
+---
+# ─────────────────────────────────────────────
+# cart  (Spring Boot — port 8080)
+# ─────────────────────────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cart
+  namespace: cloudcart
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: cart
+  template:
+    metadata:
+      labels:
+        app: cart
+    spec:
+      containers:
+      - name: cart
+        image: 264765155226.dkr.ecr.ap-south-1.amazonaws.com/cart:latest
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cart
+  namespace: cloudcart
+spec:
+  selector:
+    app: cart
+  ports:
+  - port: 8080
+    targetPort: 8080
+---
+# ─────────────────────────────────────────────
+# payment-mock  (Spring Boot — port 8080)
+# ─────────────────────────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-mock
+  namespace: cloudcart
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payment-mock
+  template:
+    metadata:
+      labels:
+        app: payment-mock
+    spec:
+      containers:
+      - name: payment-mock
+        image: 264765155226.dkr.ecr.ap-south-1.amazonaws.com/payment-mock:latest
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: payment-mock
+  namespace: cloudcart
+spec:
+  selector:
+    app: payment-mock
+  ports:
+  - port: 8080
+    targetPort: 8080
+---
+# ─────────────────────────────────────────────
+# notification  (Spring Boot — port 8080)
+# ─────────────────────────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notification
+  namespace: cloudcart
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notification
+  template:
+    metadata:
+      labels:
+        app: notification
+    spec:
+      containers:
+      - name: notification
+        image: 264765155226.dkr.ecr.ap-south-1.amazonaws.com/notification:latest
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: notification
+  namespace: cloudcart
+spec:
+  selector:
+    app: notification
+  ports:
+  - port: 8080
+    targetPort: 8080
+---
+# ─────────────────────────────────────────────
+# order  (Spring Boot — port 8080)
+# ─────────────────────────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order
+  namespace: cloudcart
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: order
+  template:
+    metadata:
+      labels:
+        app: order
+    spec:
+      containers:
+      - name: order
+        image: 264765155226.dkr.ecr.ap-south-1.amazonaws.com/order:latest
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: order
+  namespace: cloudcart
+spec:
+  selector:
+    app: order
+  ports:
+  - port: 8080
+    targetPort: 8080
+---
+# ─────────────────────────────────────────────
+# frontend  (nginx — port 80, NOT 8080)
+# ─────────────────────────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: cloudcart
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: 264765155226.dkr.ecr.ap-south-1.amazonaws.com/frontend:latest
+        ports:
+        - containerPort: 80
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  namespace: cloudcart
+spec:
+  selector:
+    app: frontend
+  ports:
+  - port: 80
+    targetPort: 80

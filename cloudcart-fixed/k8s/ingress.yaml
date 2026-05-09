@@ -1,0 +1,42 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: cloudcart-ingress
+  namespace: cloudcart
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 80
+                  
+          - path: /api/catalog
+            pathType: Prefix
+            backend:
+              service:
+                name: catalog
+                port:
+                  number: 8080
+
+          - path: /api/cart
+            pathType: Prefix
+            backend:
+              service:
+                name: cart
+                port:
+                  number: 8080
+
+          - path: /api/order
+            pathType: Prefix
+            backend:
+              service:
+                name: order
+                port:
+                  number: 8080
